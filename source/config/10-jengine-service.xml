@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+
+<server>
+
+ 	<!--
+		jEngine Queue Definitions
+		drop into server/default/deploy/jms
+	-->
+  
+  <mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="JEngine:service=Queue,name=Q_IN_HL7_MS4_M2_ADT">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+  <mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="JEngine:service=Queue,name=Q_IN_HL7_MS4_PHARM_ADT">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+  <mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="JEngine:service=Queue,name=Q_IN_LOG_HL7_MS4_M2_ADT">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+  <mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="JEngine:service=Queue,name=Q_IN_LOG_HL7_MS4_PHARM_ADT">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+  <mbean code="org.jboss.mq.server.jmx.Queue" name="JEngine:service=Queue,name=Q_OUT_HL7_PHARM">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+  <mbean code="org.jboss.mq.server.jmx.Queue" name="JEngine:service=Queue,name=Q_OUT_HL7_M2">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+  <mbean code="org.jboss.mq.server.jmx.Queue" name="JEngine:service=Queue,name=Q_ERROR_OUT_HL7_PHARM">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+  <mbean code="org.jboss.mq.server.jmx.Queue" name="JEngine:service=Queue,name=Q_ERROR_OUT_HL7_M2">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+
+   <mbean code="org.jengine.mbean.HL7ServerService" name="JEngine:service=Interface,name=TCP_IN_HL7_MS4">
+       <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+	<!--<attribute name="Port">9000</attribute>-->
+	<attribute name="Port">5100</attribute>
+       	<attribute name="IFName">TCP_IN_HL7_MS4</attribute>
+       	<attribute name="Queues">Q_IN_HL7_MS4_M2_ADT:Q_IN_LOG_HL7_MS4_M2_ADT:Q_IN_HL7_MS4_PHARM_ADT:Q_IN_LOG_HL7_MS4_PHARM_ADT</attribute>
+   </mbean>
+
+   <mbean code="org.jengine.mbean.HL7XformService" name="JEngine:service=Internal,name=XFORM_HL7_MS4_M2_ADT">
+       <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+       	<attribute name="IFName">XFORM_HL7_MS4_M2_ADT</attribute>
+       	<attribute name="InQueue">Q_IN_HL7_MS4_M2_ADT</attribute>
+       	<attribute name="OutQueue">Q_OUT_HL7_M2</attribute>
+   </mbean>
+
+   <mbean code="org.jengine.mbean.HL7XformService" name="JEngine:service=Internal,name=XFORM_HL7_PHARM_ADT">
+       <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+       	<attribute name="IFName">XFORM_HL7_MS4_PHARM_ADT</attribute>
+       	<attribute name="InQueue">Q_IN_HL7_MS4_PHARM_ADT</attribute>
+       	<attribute name="OutQueue">Q_OUT_HL7_PHARM</attribute>
+   </mbean>
+
+   <mbean code="org.jengine.mbean.HL7ClientService" name="JEngine:service=Interface,name=TCP_OUT_HL7_PHARM">
+        <attribute name="Port">3000</attribute>
+        <attribute name="IFName">TCP_OUT_HL7_PHARM</attribute>
+	<!--
+        <attribute name="IPAddress">10.10.0.58</attribute>
+	-->
+        <attribute name="IPAddress">127.0.0.1</attribute>
+        <attribute name="Queue">Q_OUT_HL7_PHARM</attribute>
+        <attribute name="QueueError">Q_ERROR_OUT_HL7_PHARM</attribute>
+        <attribute name="ResendFailedCount">10</attribute>
+        <attribute name="ResendRetryInterval">5000</attribute>
+        <attribute name="ConnectRetryInterval">20000</attribute>
+   </mbean>
+
+   <mbean code="org.jengine.mbean.HL7ClientService" name="JEngine:service=Interface,name=TCP_OUT_HL7_M2">
+        <attribute name="Port">6000</attribute>
+        <attribute name="IFName">TCP_OUT_HL7_MEDITECH</attribute>
+	<!--
+        <attribute name="IPAddress">10.10.0.58</attribute>
+	-->
+        <attribute name="IPAddress">127.0.0.1</attribute>
+        <attribute name="Queue">Q_OUT_HL7_M2</attribute>
+        <attribute name="QueueError">Q_ERROR_OUT_HL7_M2</attribute>
+        <attribute name="ResendFailedCount">10</attribute>
+        <attribute name="ResendRetryInterval">5000</attribute>
+        <attribute name="ConnectRetryInterval">20000</attribute>
+   </mbean>
+
+   <mbean code="org.jengine.mbean.HL7XformService" name="JEngine:service=Interface,name=XLATE_TEST">
+       <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+        <attribute name="IFName">XLATE_TEST</attribute>
+       	<attribute name="InQueue">Q_IN_HL7_MS4_PHARM_ADT</attribute>
+       	<attribute name="OutQueue">Q_OUT_HL7_PHARM</attribute>
+        <attribute name="Transformation">org.jengine.xforms.bsh.Transformation</attribute>
+        <attribute name="TransformationProperties">
+	   log.info("transformation in progress");
+	   log.info("version is "+message.versionID);
+           String eventTypeCode, patientClass;
+           try {
+	   pv1Segment = message.getSegment("PV1");
+	   evnSegment = message.getSegment("EVN");
+	   eventTypeCodeField = evnSegment.getField(1);
+	   eventTypeCode = eventTypeCodeField.get(1);
+	   patientClassField = pv1Segment.getField(2);
+	   patientClass = patientClassField.get(1);
+           } catch (Exception e)
+           { log.error("Exception in assignements"); e.printStackTrace(); }
+
+           String mappedPatientStatus = "";
+		if (eventTypeCode.equals("A01")) mappedPatientStatus = "ADM";
+                else if (eventTypeCode.equals("A02")) mappedPatientStatus =  "";
+                else if (eventTypeCode.equals("A03")) mappedPatientStatus = "DIS";
+                else if (eventTypeCode.equals("A04")) mappedPatientStatus = "REG";
+                else if (eventTypeCode.equals("A05")) mappedPatientStatus = "SCH";
+                else if (eventTypeCode.equals("A06")) mappedPatientStatus = "ADM";
+                else if (eventTypeCode.equals("A07")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A07")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A08")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A09")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A11")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A12")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A13")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A17")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A18")) mappedPatientStatus = "";
+		else mappedPatientStatus = "";
+            }
+            log.info("EventTypeCode : [" + eventTypeCode + "]" + " >> PatientStatus : [" + mappedPatientStatus + "]");
+            pv1Segment.setValue(41,mappedPatientStatus);
+
+           String mappedPatientType = "";
+           switch (patientClass)
+           {
+		if (patientClass.equals("B")) mappedPatientType = "CLI";
+                else if (patientClass.equals("O")) mappedPatientType = "CLI";
+                else if (patientClass.equals("P")) mappedPatientType = "CLI";
+                else if (patientClass.equals("T")) mappedPatientType = "CLI";
+                else if (patientClass.equals("B")) mappedPatientType = "CLI";
+                else if (patientClass.equals("W")) mappedPatientType = "CLI";
+                else if (patientClass.equals("E")) mappedPatientType = "ER";
+                else if (patientClass.equals("I")) mappedPatientType = "IN";
+                else if (patientClass.equals("N")) mappedPatientType = "IN";
+                else if (patientClass.equals("D")) mappedPatientType = "INO";
+                else if (patientClass.equals("R")) mappedPatientType = "RCR";
+                else if (patientClass.equals("A")) mappedPatientType = "REF";
+                else if (patientClass.equals("X")) mappedPatientType = "REF";
+                else if (patientClass.equals("S")) mappedPatientType = "SDC";
+		else mappedPatientType = "";
+            }
+            pv1Segment.setValue(18,mappedPatientType);
+            log.info("PatientClass : [" + patientClass + "]" + " >> PatientType : [" + mappedPatientType + "]");
+	</attribute>
+   </mbean>
+</server>

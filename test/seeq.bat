@@ -1,0 +1,1 @@
+java -cp ..\je_run\lib\ext\log4j.jar;..\je_run\client\jnp-client.jar;..\je_run\client\jboss-j2ee.jar;..\je_run\client\jbossmq-client.jar;..\jE_Run\lib\ext\jengine-service.jar org.jengine.browser.QBrowser Q_IN_LOG_HL7_MS4_M2_ADT

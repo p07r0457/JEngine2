@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE attributes PUBLIC "-//NetBeans//DTD DefaultAttributes 1.0//EN" "http://www.netbeans.org/dtds/attributes-1_0.dtd">
+<attributes version="1.0">
+    <fileobject name="Segment.java">
+        <attr name="class_dependency_java.lang.Object" stringvalue="Segment"/>
+    </fileobject>
+    <fileobject name="Field.java">
+        <attr name="class_dependency_java.lang.Object" stringvalue="Field"/>
+    </fileobject>
+    <fileobject name="Message.java">
+        <attr name="class_dependency_java.lang.Object" stringvalue="Message"/>
+    </fileobject>
+</attributes>

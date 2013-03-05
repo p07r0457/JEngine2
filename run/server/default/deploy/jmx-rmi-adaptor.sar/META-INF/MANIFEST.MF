@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.5.2 
+Created-By: 1.4.1_02-b06 (Sun Microsystems Inc.)
+Specification-Title: JBoss
+Specification-Version: 3.2
+Specification-Vendor: JBoss (http://www.jboss.org/)
+Implementation-Title: JBoss [WonderLand]
+Implementation-URL: http://www.jboss.org/
+Implementation-Version: 3.2.1 (build: CVSTag=JBoss_3_2_1 date=20030504
+ 1533)
+Implementation-Vendor: JBoss.org
+Implementation-Vendor-Id: http://www.jboss.org/
+

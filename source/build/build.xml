@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="all" name="jengine">
+    <property file="build.properties"/>
+
+    
+    <target name="setpaths">
+       <echo message="from build.properties : jboss_home : ${jboss_home}"/>
+       <path id="project.class.path">
+        <fileset dir="${jboss_home}">
+            <include name="jboss.jar"/>
+            <include name="jboss-system.jar"/>
+            <include name="jboss-j2ee.jar"/>
+            <include name="jboss-jsr77.jar"/>
+            <include name="jbossmq.jar"/>
+            <include name="log4j.jar"/>
+        </fileset>
+        <fileset dir="${jboss_top}">
+            <include name="jboss-system.jar"/>
+            <include name="jboss-jmx.jar"/>
+        </fileset>
+        <fileset dir="../lib">
+            <include name="bsh-1.3b1.jar"/>
+        </fileset>
+       </path>
+    </target>
+
+    <target depends="setpaths" name="init">
+
+        <property name="bshlib" value="/Users/alan/downloads/bsh-1.2b6.jar"/>
+
+        <mkdir dir="../binaries"/>
+
+    </target>
+
+    <target depends="init" name="compile">
+        <!-- Both srcdir and destdir should be package roots. -->
+        <!-- They could be different of course; in that case NetBeans can also be set -->
+        <!-- up to compile to a different filesystem in the same way; see Compiler Types: -->
+        <mkdir dir="../binaries"/>
+        <javac debug="true" deprecation="true" destdir="../binaries" srcdir="../src">
+            <classpath refid="project.class.path"/>
+        </javac>
+    </target>
+
+    <target depends="init,compile" name="jar">
+        <!-- To make a standalone app: -->
+        <!-- 1. Create a myapp.mf manifest somewhere. -->
+        <!-- 2. Put in it: -->
+        <!--    Manifest-Version: 1.0 -->
+        <!--    Main-Class: com.foo.Main -->
+        <!-- 3. Pass to <jar>: manifest="myapp.mf" -->
+
+        <mkdir dir="../lib"/>
+        <jar basedir="../binaries" compress="true" jarfile="../bin/run.jar" includes="org/jengine/*">
+        </jar>
+        <jar basedir="../binaries" compress="true" jarfile="../lib/jengine-tools.jar" includes="org/jengine/tools/**">
+        </jar>
+        <jar basedir="../binaries" compress="true" jarfile="../lib/jengine.jar" includes="org/jengine/**">
+        </jar>
+    </target>
+
+    <target depends="init,jar" description="Build everything." name="all">
+        <echo message="Application built."/>
+    </target>
+
+    <target depends="init" description="JEngine Javadoc." name="javadoc">
+        <mkdir dir="apidoc"/>
+        <javadoc destdir="apidoc" packagenames="org.jengine.*">
+            <sourcepath>
+                <pathelement location="src"/>
+            </sourcepath>
+        </javadoc>
+    </target>
+
+    <target depends="init" description="Clean all build products." name="clean">
+        <delete>
+            <fileset dir="..">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+        <delete file="jengine.jar"/>
+        <delete dir="apidoc"/>
+    </target>
+
+</project>

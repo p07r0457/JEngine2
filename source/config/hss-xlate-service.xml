@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+<!--
+ADT Xform Rules for ACH
+ PV1-2 >> PV1-18 [HL7 Patient Class >> HL7 Patient Type]
+    B,O,P,T,B,W >> CLI
+    E >> ER
+    I,N >> IN
+    D >> INO
+    R >> RCR
+    A,X >> REF
+    S >> SDC
+ EVN-1 >> PV1-41 [HL7 Event Type Code >> HL7 Account Status (or MT Patient Status)]
+    A01 >> ADM
+    A02 >> NA [look to prior status]
+    A03 >> DIS
+    A04 >> REG
+    A05 >> SCH
+    A06 >> ADM
+    A07 >> NA [not applicable]
+    A08 >> NA [look to prior status]
+    A09 >> NA [not applicable]
+    A11 >> NA [look to prior status]
+    A12 >> NA [not applicable]
+    A13 >> NA [look to prior status]
+    A17 >> NA [look to prior status]
+    A18 >> NA [look to prior status]
+-->
+   <mbean code="org.jengine.mbean.HL7XformService" name="JEngine:service=Interface,name=XLATE_TEST">
+        <attribute name="IFName">XLATE_TEST</attribute>
+       	<attribute name="InQueue">Q_IN_HL7_MS4_PHARM_ADT</attribute>
+       	<attribute name="OutQueue">Q_OUT_HL7_PHARM</attribute>
+        <attribute name="Transformation">org.jengine.xforms.bsh.Transformation</attribute>
+        <attribute name="TransformationProperties">
+	   log.info("transformation in progress");
+	   log.info("version is "+message.versionID);
+           String eventTypeCode, patientClass;
+           try {
+	   pv1Segment = message.getSegment("PV1");
+	   evnSegment = message.getSegment("EVN");
+	   eventTypeCodeField = evnSegment.getField(1);
+	   eventTypeCode = eventTypeCodeField.get(1);
+	   patientClassField = pv1Segment.getField(2);
+	   patientClass = patientClassField.get(1);
+           } catch (Exception e)
+           { log.error("Exception in assignements"); e.printStackTrace(); }
+
+           try {
+           String mappedPatientStatus = "";
+		if (eventTypeCode.equals("A01")) mappedPatientStatus = "ADM";
+                else if (eventTypeCode.equals("A02")) mappedPatientStatus =  "";
+                else if (eventTypeCode.equals("A03")) mappedPatientStatus = "DIS";
+                else if (eventTypeCode.equals("A04")) mappedPatientStatus = "REG";
+                else if (eventTypeCode.equals("A05")) mappedPatientStatus = "SCH";
+                else if (eventTypeCode.equals("A06")) mappedPatientStatus = "ADM";
+                else if (eventTypeCode.equals("A07")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A07")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A08")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A09")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A11")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A12")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A13")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A17")) mappedPatientStatus = "";
+                else if (eventTypeCode.equals("A18")) mappedPatientStatus = "";
+		else mappedPatientStatus = "";
+            }
+            log.info("EventTypeCode : [" + eventTypeCode + "]" + " >> PatientStatus : [" + mappedPatientStatus + "]");
+            pv1Segment.setValue(41,mappedPatientStatus);
+           } catch (Exception e)
+           { log.error("Exception in mapping Patient Status"); e.printStackTrace(); }
+
+           try {
+           String mappedPatientType = "";
+           switch (patientClass)
+           {
+		if (patientClass.equals("B")) mappedPatientType = "CLI";
+                else if (patientClass.equals("O")) mappedPatientType = "CLI";
+                else if (patientClass.equals("P")) mappedPatientType = "CLI";
+                else if (patientClass.equals("T")) mappedPatientType = "CLI";
+                else if (patientClass.equals("B")) mappedPatientType = "CLI";
+                else if (patientClass.equals("W")) mappedPatientType = "CLI";
+                else if (patientClass.equals("E")) mappedPatientType = "ER";
+                else if (patientClass.equals("I")) mappedPatientType = "IN";
+                else if (patientClass.equals("N")) mappedPatientType = "IN";
+                else if (patientClass.equals("D")) mappedPatientType = "INO";
+                else if (patientClass.equals("R")) mappedPatientType = "RCR";
+                else if (patientClass.equals("A")) mappedPatientType = "REF";
+                else if (patientClass.equals("X")) mappedPatientType = "REF";
+                else if (patientClass.equals("S")) mappedPatientType = "SDC";
+		else mappedPatientType = "";
+            }
+            pv1Segment.setValue(18,mappedPatientType);
+            log.info("PatientClass : [" + patientClass + "]" + " >> PatientType : [" + mappedPatientType + "]");
+           } catch (Exception e)
+           { log.error("Exception in mapping Patient Type"); e.printStackTrace(); }
+
+	</attribute>
+   </mbean>
+</server>

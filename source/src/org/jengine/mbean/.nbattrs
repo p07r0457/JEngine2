@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE attributes PUBLIC "-//NetBeans//DTD DefaultAttributes 1.0//EN" "http://www.netbeans.org/dtds/attributes-1_0.dtd">
+<attributes version="1.0">
+    <fileobject name="HL7Xform.java">
+        <attr name="class_dependency_java.lang.Runnable" stringvalue="HL7Xform"/>
+    </fileobject>
+    <fileobject name="HL7Client.java">
+        <attr name="class_dependency_java.lang.Runnable" stringvalue="HL7Client"/>
+    </fileobject>
+    <fileobject name="HL7Server.java">
+        <attr name="class_dependency_java.lang.Runnable" stringvalue="HL7Server"/>
+    </fileobject>
+</attributes>

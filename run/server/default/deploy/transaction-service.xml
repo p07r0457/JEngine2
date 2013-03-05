@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+<!-- $Id: transaction-service.xml,v 1.2.2.1 2003/02/15 15:33:36 d_jencks Exp $ -->
+
+<server>
+
+  <!-- ==================================================================== -->
+  <!-- Transactions                                                         -->
+  <!-- ==================================================================== -->
+
+  <!-- The configurable Xid factory.  For use with Oracle, set pad to true -->
+  <mbean code="org.jboss.tm.XidFactory" 
+	 name="jboss:service=XidFactory">
+    <!--attribute name="Pad">true</attribute-->
+  </mbean>
+
+
+  <!--
+     | The fast in-memory transaction manager.
+   -->
+  <mbean code="org.jboss.tm.TransactionManagerService" 
+	 name="jboss:service=TransactionManager">
+    <attribute name="TransactionTimeout">300</attribute>
+
+    <depends optional-attribute-name="XidFactory">jboss:service=XidFactory</depends>
+  </mbean>
+
+  <!--
+     | UserTransaction support.
+   -->
+  <mbean code="org.jboss.tm.usertx.server.ClientUserTransactionService"
+	 name="jboss:service=ClientUserTransaction">
+  </mbean>
+
+  <!-- 
+     | The CachedConnectionManager is used partly to relay started UserTransactions to 
+     | open connections so they may be enrolled in the new tx.
+   -->
+  <mbean code="org.jboss.resource.connectionmanager.CachedConnectionManager" 
+	 name="jboss.jca:service=CachedConnectionManager">
+    <!--SpecCompliant false means JBoss will close connections left open when you 
+        return from a method call and generate a loud warning.  SpecCompliant true
+        means JBoss will disconnect connection handles left open on return from a
+        method call and reconnect them with an appropriate (security, tx) 
+        connection on the next call to the same object.-->
+    <attribute name="SpecCompliant">false</attribute>
+  </mbean>
+
+</server>
